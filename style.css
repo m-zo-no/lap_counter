@@ -1,0 +1,404 @@
+/* ==========================================================
+   基本設定
+   ========================================================== */
+
+:root {
+  color-scheme: light;
+
+  --background: #ffffff;
+  --border-color: #087ce5;
+
+  --name-background: #ffff80;
+  --count-background: #ffffff;
+  --minus-background: #7de1f5;
+  --plus-background: #f8bfe8;
+
+  --name-text: #286f59;
+  --normal-text: #1477cd;
+  --last-text: #e02020;
+  --finish-text: #23823c;
+
+  --gap: 6px;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+html {
+  background: var(--background);
+  -webkit-text-size-adjust: 100%;
+}
+
+body {
+  margin: 0;
+  background: var(--background);
+  color: #303030;
+
+  font-family:
+    "Hiragino Maru Gothic ProN",
+    "Hiragino Sans",
+    "Yu Gothic",
+    "Meiryo",
+    sans-serif;
+}
+
+button,
+input {
+  font: inherit;
+}
+
+button {
+  -webkit-appearance: none;
+  appearance: none;
+  cursor: pointer;
+
+  /* タップの操作を優先し、ピンチズームは維持する */
+  touch-action: manipulation;
+
+  -webkit-tap-highlight-color: transparent;
+}
+
+button:focus-visible,
+input:focus-visible {
+  outline: 3px solid #222222;
+  outline-offset: -3px;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+/* ==========================================================
+   全体とタイトル
+   ========================================================== */
+
+.app {
+  min-height: 100vh;
+  min-height: 100dvh;
+
+  display: flex;
+  flex-direction: column;
+
+  padding:
+    max(10px, env(safe-area-inset-top))
+    max(8px, env(safe-area-inset-right))
+    max(8px, env(safe-area-inset-bottom))
+    max(8px, env(safe-area-inset-left));
+}
+
+.app-header {
+  flex: 0 0 auto;
+  padding: 0 6px 8px;
+}
+
+h1 {
+  margin: 0;
+  font-size: clamp(20px, 2.6vw, 30px);
+  line-height: 1.4;
+}
+
+/* ==========================================================
+   20名：2列×10段、並び順は固定
+   ========================================================== */
+
+.board {
+  flex: 1;
+
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-rows: repeat(10, minmax(72px, 1fr));
+
+  gap: var(--gap);
+
+  /* 小さい画面では縮めすぎず、ページをスクロールさせる */
+  min-height: 774px;
+}
+
+/* ==========================================================
+   生徒カード
+   名前28%、残り40%、−1と＋1が各16%
+   ========================================================== */
+
+.student-card {
+  min-width: 0;
+
+  display: grid;
+  grid-template-columns:
+    minmax(0, 28fr)
+    minmax(0, 40fr)
+    minmax(0, 16fr)
+    minmax(0, 16fr);
+
+  gap: 2px;
+  padding: 3px;
+
+  background: var(--border-color);
+}
+
+.card-section {
+  min-width: 0;
+  min-height: 0;
+
+  border: 0;
+  border-radius: 0;
+  padding: 2px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  text-align: center;
+  font-weight: 700;
+  line-height: 1.15;
+}
+
+.name-button {
+  background: var(--name-background);
+  color: var(--name-text);
+
+  font-size: clamp(14px, 1.8vw, 24px);
+  overflow-wrap: anywhere;
+}
+
+.count-section {
+  background: var(--count-background);
+  color: var(--normal-text);
+
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 5fr);
+  gap: 2px;
+}
+
+.remaining-caption {
+  font-size: clamp(10px, 1.1vw, 15px);
+  line-height: 1.15;
+}
+
+.remaining-number {
+  min-width: 0;
+  white-space: nowrap;
+
+  font-size: clamp(20px, 2.7vw, 36px);
+  font-variant-numeric: tabular-nums;
+}
+
+.remaining-unit {
+  font-size: 0.65em;
+}
+
+.minus-button,
+.plus-button {
+  font-size: clamp(18px, 2.4vw, 32px);
+  white-space: nowrap;
+}
+
+.minus-button {
+  background: var(--minus-background);
+  color: var(--normal-text);
+}
+
+.plus-button {
+  background: var(--plus-background);
+  color: var(--normal-text);
+}
+
+.name-button:active,
+.minus-button:active,
+.plus-button:active {
+  filter: brightness(0.9);
+}
+
+/* ==========================================================
+   残り1周・終了
+   ========================================================== */
+
+.count-section.is-last {
+  color: var(--last-text);
+}
+
+.count-section.is-last.blink-hidden {
+  color: var(--count-background);
+}
+
+.count-section.is-finished {
+  color: var(--finish-text);
+}
+
+/* ==========================================================
+   設定ダイアログ
+   ========================================================== */
+
+.student-dialog {
+  width: min(440px, calc(100% - 28px));
+  max-height: calc(100dvh - 32px);
+  overflow-y: auto;
+
+  border: 2px solid var(--border-color);
+  border-radius: 12px;
+  padding: 22px;
+
+  background: #ffffff;
+  color: #303030;
+}
+
+.student-dialog::backdrop {
+  background: rgb(0 0 0 / 35%);
+}
+
+.student-dialog h2 {
+  margin: 0 0 20px;
+  font-size: 22px;
+}
+
+.form-field {
+  margin-bottom: 16px;
+}
+
+.form-field label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 700;
+}
+
+.form-field input {
+  width: 100%;
+  min-height: 48px;
+
+  border: 1px solid #888888;
+  border-radius: 6px;
+  padding: 10px;
+
+  /* iPadで入力時の意図しない拡大を避ける */
+  font-size: 18px;
+  background: #ffffff;
+  color: #222222;
+}
+
+.reset-option {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+
+  min-height: 44px;
+  cursor: pointer;
+}
+
+.reset-option input {
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+}
+
+.form-help {
+  color: #555555;
+  font-size: 13px;
+  line-height: 1.6;
+}
+
+.form-error {
+  color: #b00020;
+  font-size: 14px;
+  line-height: 1.5;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 12px;
+  margin-top: 22px;
+}
+
+.dialog-actions button {
+  flex: 1;
+  min-height: 48px;
+
+  border: 0;
+  border-radius: 6px;
+  padding: 10px;
+
+  font-size: 16px;
+  font-weight: 700;
+}
+
+.save-button {
+  background: var(--border-color);
+  color: #ffffff;
+}
+
+.cancel-button {
+  background: #eeeeee;
+  color: #303030;
+}
+
+/* ==========================================================
+   エラー通知
+   ========================================================== */
+
+.notice {
+  position: fixed;
+  z-index: 1000;
+
+  left: 50%;
+  bottom: max(16px, env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+
+  width: min(560px, calc(100% - 24px));
+
+  border: 2px solid #b00020;
+  border-radius: 8px;
+  padding: 14px 18px;
+
+  background: #fff2f2;
+  color: #8c0018;
+
+  font-size: 15px;
+  line-height: 1.5;
+  white-space: pre-line;
+
+  box-shadow: 0 4px 18px rgb(0 0 0 / 18%);
+}
+
+.startup-error {
+  margin: 16px;
+  padding: 18px;
+  border: 2px solid #b00020;
+
+  background: #fff2f2;
+  color: #8c0018;
+
+  line-height: 1.6;
+  white-space: pre-line;
+}
+
+/* ==========================================================
+   小さい画面でも2列の配置を維持
+   ========================================================== */
+
+@media (max-width: 600px) {
+  .app {
+    padding-left: 4px;
+    padding-right: 4px;
+  }
+
+  .board {
+    gap: 4px;
+  }
+
+  .student-card {
+    gap: 1px;
+    padding: 2px;
+  }
+
+  .name-button {
+    font-size: 12px;
+  }
+
+  .remaining-number {
+    font-size: 18px;
+  }
+
+  .minus-button,
+  .plus-button {
+    font-size: 16px;
+  }
+}

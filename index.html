@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1, viewport-fit=cover"
+  >
+
+  <meta name="theme-color" content="#ffffff">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta
+    name="apple-mobile-web-app-status-bar-style"
+    content="default"
+  >
+  <meta
+    name="apple-mobile-web-app-title"
+    content="周回カウンター"
+  >
+
+  <title>持久走・周回カウンター</title>
+
+  <link rel="stylesheet" href="./style.css">
+  <script src="./app.js" defer></script>
+</head>
+
+<body>
+  <main class="app">
+    <header class="app-header">
+      <h1>持久走・周回カウンター</h1>
+    </header>
+
+    <section
+      id="board"
+      class="board"
+      aria-label="20名の周回カウンター"
+    ></section>
+
+    <p
+      id="startup-error"
+      class="startup-error"
+      role="alert"
+      hidden
+    ></p>
+
+    <noscript>
+      このアプリを使用するには、JavaScriptを有効にしてください。
+    </noscript>
+  </main>
+
+  <!-- 保存エラーなどの通知。通常は非表示です。 -->
+  <div
+    id="notice"
+    class="notice"
+    role="status"
+    aria-live="polite"
+    hidden
+  ></div>
+
+  <!-- 名前・目標周数の編集画面 -->
+  <dialog id="student-dialog" class="student-dialog">
+    <form id="student-form">
+      <h2>生徒の設定</h2>
+
+      <div class="form-field">
+        <label for="student-name">生徒名</label>
+        <input
+          id="student-name"
+          name="student-name"
+          type="text"
+          maxlength="40"
+          autocomplete="off"
+          required
+        >
+      </div>
+
+      <div class="form-field">
+        <label for="student-target">目標周数</label>
+        <input
+          id="student-target"
+          name="student-target"
+          type="number"
+          min="1"
+          step="1"
+          inputmode="numeric"
+          required
+        >
+      </div>
+
+      <label class="reset-option">
+        <input id="reset-remaining" type="checkbox">
+        <span>残り周数を目標周数に戻す</span>
+      </label>
+
+      <p class="form-help">
+        目標周数を変更すると、残り周数も設定し直します。
+      </p>
+
+      <p
+        id="form-error"
+        class="form-error"
+        role="alert"
+        hidden
+      ></p>
+
+      <div class="dialog-actions">
+        <button type="submit" class="save-button">
+          保存
+        </button>
+
+        <button
+          id="cancel-button"
+          type="button"
+          class="cancel-button"
+        >
+          キャンセル
+        </button>
+      </div>
+    </form>
+  </dialog>
+</body>
+</html>
